@@ -38,7 +38,7 @@ public interface ArticleDao {
 			FROM article
 			WHERE id = #{id}
 			""")
-	public Article getArticleById(int id);
+	public Article getArticleById(Integer id);
 	
 	
 	@Update("""

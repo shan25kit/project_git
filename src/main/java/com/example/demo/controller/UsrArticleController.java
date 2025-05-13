@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -28,25 +29,20 @@ public class UsrArticleController {
 	}
 
 	@GetMapping("/usr/article/list")
-	@ResponseBody
-	public Object list() {
+	public String list(Model model) {
 		List<Article> articles = this.articleService.getArticles();
-		if (articles.size() == 0) {
-			return "게시물이 없습니다.";
-		}
-		return articles;
+		model.addAttribute("articles", articles);
+		return "usr/article/list";
 	}
 
 	@GetMapping("/usr/article/detail")
-	@ResponseBody
-	public Object detail(int id) {
+	public Object detail(Model model, int id) {
 		Article article = this.articleService.getArticleById(id);
-		
-		if (article == null) {
-			return String.format("%d번 게시물은 존재하지 않습니다.", id);
-		}
-		return article;
+		model.addAttribute("article", article);
+
+		return "usr/article/detail";
 	}
+	
 
 	@GetMapping("/usr/article/modify")
 	@ResponseBody
@@ -59,7 +55,7 @@ public class UsrArticleController {
 		this.articleService.modifyArticle(id, title, content);
 		return String.format("%d번 게시물을 수정했습니다.", id);
 	}
-
+ 
 	@GetMapping("/usr/article/delete")
 	@ResponseBody
 	public String delete(int id) {
