@@ -13,6 +13,7 @@ import com.example.demo.dto.Article;
 
 @Mapper
 public interface ArticleDao {
+	
 	@Insert("""
 			INSERT INTO article
 				SET regDate =now()
@@ -20,8 +21,6 @@ public interface ArticleDao {
 					,title = #{title}
 					,content = #{content}
 			""")
-	
-	
 	public int writeArticle(String title, String content);
 
 
@@ -30,7 +29,6 @@ public interface ArticleDao {
 			FROM article
 			ORDER BY id DESC
 			""")
-	
 	public List<Article> getArticles();
 	
 	@Select("""
@@ -38,8 +36,7 @@ public interface ArticleDao {
 			FROM article
 			WHERE id = #{id}
 			""")
-	public Article getArticleById(Integer id);
-	
+	public Article getArticleById(int id);
 	
 	@Update("""
 			<script>
@@ -48,19 +45,20 @@ public interface ArticleDao {
 				<if test="title !=null and title != ''">
 						 ,title = #{title}
 				</if>
-				<if test="content != null and content != ''">
+				<if test="content !=null and content != ''">
 						, content = #{content}
-				 </if>
+				</if>
 			WHERE id = #{id}
 			</script>
 			""")
 	
-	public void modifyArticle(int id, String title, String content);
+	public void modifyArticle(String title, String content);
 
 	@Delete("""
 			DELETE FROM article
 			WHERE id = #{id}
 			""")
+	public int deleteArticle(int id);
+	
 
-	public void deleteArticle(int id);
 }

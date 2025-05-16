@@ -5,10 +5,12 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.dto.Article;
 import com.example.demo.service.ArticleService;
+import com.example.demo.util.Util;
 
 @Controller
 public class UsrArticleController {
@@ -19,13 +21,18 @@ public class UsrArticleController {
 		this.articleService = articleService;
 	}
 
+
 	@GetMapping("/usr/article/write")
+	public String write() {
+		return "usr/article/write";
+	}
+	
+	@PostMapping("/usr/article/doWrite")
 	@ResponseBody
-	public String write(String title, String content) {
-
-		int id = this.articleService.writeArticle(title, content);
-
-		return String.format("%d번 게시물이 생성되었습니다.", id);
+	public String doWrite(String title, String content) {
+		this.articleService.writeArticle(title, content);
+		
+		return Util.jsReplace("게시물이 작성되었습니다.","list");
 	}
 
 	@GetMapping("/usr/article/list")
@@ -42,30 +49,28 @@ public class UsrArticleController {
 
 		return "usr/article/detail";
 	}
-	
 
 	@GetMapping("/usr/article/modify")
-	@ResponseBody
-	public String modify(int id, String title, String content) {
+	public String modify(Model model, int id) {
 		Article article = this.articleService.getArticleById(id);
-		
-		if (article == null) {
-			return String.format("%d번 게시물은 존재하지 않습니다.", id);
-		}
-		this.articleService.modifyArticle(id, title, content);
-		return String.format("%d번 게시물을 수정했습니다.", id);
+		model.addAttribute("article", article);
+		return "usr/article/modify";
 	}
- 
+	
+	@PostMapping("/usr/article/doModify")
+	@ResponseBody
+	public String doModify(int id, String title, String content) {
+		this.articleService.modifyArticle(id, title, content);
+		return Util.jsReplace("게시물이 수정되었습니다.",String.format("detail=%d", id));
+	}
+
 	@GetMapping("/usr/article/delete")
 	@ResponseBody
 	public String delete(int id) {
-		Article article = this.articleService.getArticleById(id);
-		
-		if (article==null) {
-			return String.format("%d번 게시물은 존재하지 않습니다.", id);
-		}
+
 		this.articleService.deleteArticle(id);
-		return String.format("%d번 게시물을 삭제했습니다.", id);
+
+		return Util.jsReplace(String.format("%d번 게시물이 삭제되었습니다.", id),"list");
 	}
 
 }

@@ -28,11 +28,17 @@ public class ArticleService {
 		return this.articleDao.getArticleById(id);
 	}
 
-	public void modifyArticle(int id, String title, String content) {
-		this.articleDao.modifyArticle(id, title, content);
-	}
+
 
 	public void deleteArticle(int id) {
 		this.articleDao.deleteArticle(id);
 	}
+
+	public void modifyArticle(int id, String title, String content) {
+		this.articleDao.modifyArticle(title, content);
+		
+	}
 }
+
+
+
