@@ -1,106 +1,94 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <c:set var="pageTitle" value="로그인" />
 
-<%@ include file="/WEB-INF/jsp/common/header.jsp"%>
+<%@ include file="/WEB-INF/jsp/common/header.jsp" %>
 
-<script>
-		const joinFormChk = function(form) {
+	<script>
+		const loginFormChk = function (form) {
 			form.loginId.value = form.loginId.value.trim();
 			form.loginPw.value = form.loginPw.value.trim();
-			form.loginPwChk.value = form.loginPwChk.value.trim();
-			form.name.value = form.name.value.trim();
 			
 			if (form.loginId.value.length == 0) {
-			alert('아이디는 필수 입력 정보입니다');
-			form.loginId.focus();
-			
-			
-			return false;
+				alert('아이디는 필수 입력 정보입니다');
+				form.loginId.focus();
+				return false;
 			}
-
+			
 			if (form.loginPw.value.length == 0) {
-			alert('비밀번호는 필수 입력 정보입니다');
-			form.loginId.focus();
-			return false;
+				alert('비밀번호는 필수 입력 정보입니다');
+				form.loginPw.focus();
+				return false;
 			}
-
-			if (form.name.value.length == 0) {
-			alert('이름은 필수 입력 정보입니다');
-			form.loginId.focus();
-			return false;
-			}
-
-			if (form.loginPw.value != form.loginPwChk.value) {
-			alert('비밀번호가 일치하지 않습니다');
-			form.loginPw.value = '';
-			form.loginPwChk.value = '';
-			form.loginPw.focus();
-			return false;
-			}
-
-		return true;
-	}
-	
-		const loginIdDupChk = function(el){
-			el.value = el.value.trim();
+			
+			return true;
 		}
-			$ajax({
-				url : '/user/member/loginIdDupChk',
-			
-				type : 'get',
-				data : {
-					loginId : "form.loginId.value"
-				},
-				dayaType : 'json',
-				success : function(data){
-					$('#loginIdDupChkMsg').html(`\${data}`);
-						
-					}	
-				error: function(xhr, status, error){
-					console.log(error);
-				}
-			})
-			
-		
-</script>
+	</script>
 
-<section class="mt-8">
-	<div class="container mx-auto flex justify-center">
-		<form action="doJoin" method="post"
-			onsubmit="return joinFormChk(this);">
-			<div class="table-box">
-				<table class="w-50">
-					<tr>
-						<td class="bg-yellow-200 h-20 font-bold">회원 정보</td>
-					</tr>
-					<tr>
-						<td><input class="border w-80 h-10" name="loginId"
-							type="text" placeholder="아이디" onblur="loginIdDupChk(this)"/>
-							<div id="loginIdDupChkMsg" class="mt-2 text-sm h-5 text-left"></div></td>
-
-					</tr>
-					<tr>
-						<td><input class="border w-80 h-10" name="loginPw"
-							type="password" placeholder="비밀번호 확인" /></td>
-					</tr>
-					<tr>
-						<td><input class="border w-80 h-10" name="loginPwChk"
-							type="password" placeholder="비밀번호 확인" /></td>
-					</tr>
-					<tr>
-						<td><input class="border w-80 h-10" name="name" type="text"
-							placeholder="이름" /></td>
-					</tr>
-					<td class="bg-white hover:bg-yellow-200"><button
-							class="submitBtn w-32 h-15 font-bold">가입</button></td>
-				</table>
+	<section class="mt-8">
+		<div class="container mx-auto">
+			<form action="doLogin" method="post" onsubmit="return loginFormChk(this);">
+				<div class="table-box">
+					<table class="table">
+						<tr>
+							<td colspan="2">
+								<label class="input">
+								  <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+								    <g
+								      stroke-linejoin="round"
+								      stroke-linecap="round"
+								      stroke-width="2.5"
+								      fill="none"
+								      stroke="currentColor"
+								    >
+								      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+								      <circle cx="12" cy="7" r="4"></circle>
+								    </g>
+								  </svg>
+								  <input
+								    type="text"
+								    name="loginId"
+								  />
+								</label>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<label class="input">
+								  <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+								    <g
+								      stroke-linejoin="round"
+								      stroke-linecap="round"
+								      stroke-width="2.5"
+								      fill="none"
+								      stroke="currentColor"
+								    >
+								      <path
+								        d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"
+								      ></path>
+								      <circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle>
+								    </g>
+								  </svg>
+								  <input
+								    type="password"
+								    name="loginPw"
+								  />
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2"><button class="btn btn-neutral btn-outline btn-sm btn-wide">로그인</button></td>
+						</tr>
+					</table>
+				</div>
+			</form>
+			
+			<div class="bg-white p-6">
+				<div><button class="btn btn-neutral btn-outline btn-xs" onclick="history.back();">뒤로가기</button></div>
 			</div>
-		</form>
+		</div>
+	</section>
 
-	</div>
-</section>
-
-<%@ include file="/WEB-INF/jsp/common/footer.jsp"%>
+<%@ include file="/WEB-INF/jsp/common/footer.jsp" %>

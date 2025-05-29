@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class UsrHomeController {
 	
 	@GetMapping("/usr/home/main")
-	public String showMain() {
+		public String showMain() {
 		return "usr/home/main";
 	}
 	

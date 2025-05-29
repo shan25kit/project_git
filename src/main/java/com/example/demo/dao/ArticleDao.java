@@ -16,49 +16,108 @@ public interface ArticleDao {
 	
 	@Insert("""
 			INSERT INTO article
-				SET regDate =now()
-					,updateDate =now()
-					,title = #{title}
-					,content = #{content}
+			    SET regDate = NOW()
+			        , updateDate = NOW()
+			        , memberId = #{loginedMemberId}
+			        , boardId = #{boardId}
+			        , title = #{title}
+			        , content = #{content}
 			""")
-	public int writeArticle(String title, String content);
-
+	public void writeArticle(String title, String content, int loginedMemberId, int boardId);
 
 	@Select("""
-			SELECT *
-			FROM article
-			ORDER BY id DESC
-			""")
-	public List<Article> getArticles();
-	
-	@Select("""
-			SELECT *
-			FROM article
-			WHERE id = #{id}
-			""")
-	public Article getArticleById(int id);
-	
-	@Update("""
 			<script>
-			UPDATE article 
-			SET updateDate = NOW()
-				<if test="title !=null and title != ''">
-						 ,title = #{title}
-				</if>
-				<if test="content !=null and content != ''">
-						, content = #{content}
-				</if>
-			WHERE id = #{id}
+			SELECT a.*
+					, m.loginId AS writerName
+					, COUNT(l.memberId) AS `likePoint`
+			    FROM article a
+			    INNER JOIN `member` m
+			    ON a.memberId = m.id
+			    LEFT JOIN likePoint l
+			    ON l.relTypeCode = 'article'
+			    AND l.relId = a.id
+			    WHERE a.boardId = #{boardId}
+			    <if test="searchKeyword != ''">
+			    	<choose>
+			    		<when test="searchType == 'title'">
+				    		AND a.title LIKE CONCAT('%', #{searchKeyword}, '%')
+			    		</when>
+					    <when test="searchType == 'content'">
+					    	AND a.content LIKE CONCAT('%', #{searchKeyword}, '%')
+					    </when>
+					    <otherwise>
+					    	AND (
+					    		a.title LIKE CONCAT('%', #{searchKeyword}, '%')
+					    		OR a.content LIKE CONCAT('%', #{searchKeyword}, '%')
+					    	)
+					    </otherwise>
+			    	</choose>
+			    </if>
+			    GROUP BY a.id
+				ORDER BY a.id DESC
+				LIMIT #{limitFrom}, #{articlesInPage}
 			</script>
 			""")
+	public List<Article> getArticles(int boardId, int articlesInPage, int limitFrom, String searchType, String searchKeyword);
 	
-	public void modifyArticle(String title, String content);
+	@Select("""
+			SELECT a.*, m.loginId AS writerName
+			    FROM article a
+			    INNER JOIN `member` m
+			    ON a.memberId = m.id
+				WHERE a.id = #{id}
+			""")
+	public Article getArticleById(int id);
+
+	@Update("""
+			UPDATE article
+			    SET updateDate = NOW()
+			        , title = #{title}
+			        , content = #{content}
+			    WHERE id = #{id}
+			""")
+	public void modifyArticle(int id, String title, String content);
 
 	@Delete("""
 			DELETE FROM article
-			WHERE id = #{id}
+				WHERE id = #{id}
 			""")
-	public int deleteArticle(int id);
-	
+	public void deleteArticle(int id);
 
+	@Select("""
+			SELECT LAST_INSERT_ID()
+			""")
+	public int getLastArticleId();
+
+	@Select("""
+			<script>
+			SELECT COUNT(id)
+				FROM article
+				WHERE boardId = #{boardId}
+				<if test="searchKeyword != ''">
+			    	<choose>
+			    		<when test="searchType == 'title'">
+				    		AND title LIKE CONCAT('%', #{searchKeyword}, '%')
+			    		</when>
+					    <when test="searchType == 'content'">
+					    	AND content LIKE CONCAT('%', #{searchKeyword}, '%')
+					    </when>
+					    <otherwise>
+					    	AND (
+					    		title LIKE CONCAT('%', #{searchKeyword}, '%')
+					    		OR content LIKE CONCAT('%', #{searchKeyword}, '%')
+					    	)
+					    </otherwise>
+			    	</choose>
+			    </if>
+			</script>
+			""")
+	public int getArticlesCnt(int boardId, String searchType, String searchKeyword);
+
+	@Update("""
+			UPDATE article
+				SET views = views + 1
+				WHERE id = #{id}
+			""")
+	public void increaseViews(int id);
 }
