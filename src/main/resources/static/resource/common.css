@@ -1,4 +1,3 @@
-
 @charset "UTF-8";
 
 @font-face {
@@ -13,20 +12,11 @@ html * {
 }
 
 .table-box th, .table-box td {
-	border: 1px solid black;
 	padding: 10px;
 	text-align: center;
 }
 
-.btns button, .btns a {
-	padding: 5px;
-	border: 2px solid black;
-	cursor: pointer;
-	border-radius: 8px;
+.ProseMirror div, .toastui-editor-contents p {
+	font-size: 1.5rem;
+	text-align: left;
 }
-
-.btns button:hover, .btns a:hover {
-	background-color: black;
-	color: white;
-}
-

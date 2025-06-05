@@ -17,44 +17,28 @@ public class ReplyService {
 		this.replyDao = replyDao;
 	}
 
-	public void writeReply(int memberId, int relId, String relTypeCode, String content) {
-		this.replyDao.writeReply(memberId, relId, relTypeCode, content);
-		
+	public void writeReply(int memberId, String relTypeCode, int relId, String content) {
+		this.replyDao.writeReply(memberId, relTypeCode, relId, content);
 	}
 
 	public List<Reply> getReplies(String relTypeCode, int relId) {
 		return this.replyDao.getReplies(relTypeCode, relId);
 	}
 
-//	public void writeArticle(String title, String content, int loginedMemberId, int boardId) {
-//		this.articleDao.writeArticle(title, content, loginedMemberId, boardId);
-//	}
-//
-//	public List<Article> getArticles(int boardId, int articlesInPage, int limitFrom, String searchType, String searchKeyword) {
-//		return this.articleDao.getArticles(boardId, articlesInPage, limitFrom, searchType, searchKeyword);
-//	}
-//
-//	public Article getArticleById(int id) {
-//		return this.articleDao.getArticleById(id);
-//	}
-//
-//	public void modifyArticle(int id, String title, String content) {
-//		this.articleDao.modifyArticle(id, title, content);
-//	}
-//
-//	public void deleteArticle(int id) {
-//		this.articleDao.deleteArticle(id);
-//	}
-//
-//	public int getLastArticleId() {
-//		return this.articleDao.getLastArticleId();
-//	}
-//
-//	public int getArticlesCnt(int boardId, String searchType, String searchKeyword) {
-//		return this.articleDao.getArticlesCnt(boardId, searchType, searchKeyword);
-//	}
-//
-//	public void increaseViews(int id) {
-//		this.articleDao.increaseViews(id);
-//	}
+	public int getLastInsertReplyId() {
+		return this.replyDao.getLastInsertReplyId();
+	}
+
+	public Reply getReplyById(int id) {
+		return this.replyDao.getReplyById(id);
+	}
+
+	public void deleteReply(int id) {
+		this.replyDao.deleteReply(id);
+	}
+
+	public void modifyReply(int id, String content) {
+		this.replyDao.modifyReply(id, content);
+	}
+
 }

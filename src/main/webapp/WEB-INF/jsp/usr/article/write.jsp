@@ -6,10 +6,12 @@
 <c:set var="pageTitle" value="작성" />
 
 <%@ include file="/WEB-INF/jsp/common/header.jsp" %>
+<%@ include file="/WEB-INF/jsp/common/toastUiEditorLib.jsp" %>
 
 	<section class="mt-8">
 		<div class="container mx-auto">
-			<form action="doWrite" method="post">
+			<form action="doWrite" method="post" onsubmit="return submitForm(this);">
+				<input type="hidden" name="content" />
 				<div class="table-box">
 					<table class="table">
 						<tr>
@@ -39,7 +41,9 @@
 						</tr>
 						<tr>
 							<th>내용</th>
-							<td><textarea class="textarea textarea-neutral" name="content"></textarea></td>
+							<td>
+								<div id="toast-ui-editor"></div>
+							</td>
 						</tr>
 						<tr>
 							<td colspan="2"><button class="btn btn-neutral btn-outline btn-sm btn-wide">저장</button></td>
@@ -48,7 +52,7 @@
 				</div>
 			</form>
 			
-			<div class="bg-white p-6">
+			<div class="p-6">
 				<div><button class="btn btn-neutral btn-outline btn-xs" onclick="history.back();">뒤로가기</button></div>
 			</div>
 		</div>

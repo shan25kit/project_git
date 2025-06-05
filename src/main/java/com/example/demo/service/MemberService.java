@@ -9,7 +9,7 @@ import com.example.demo.dto.Member;
 public class MemberService {
 
 	private MemberDao memberDao;
-
+	
 	public MemberService(MemberDao memberDao) {
 		this.memberDao = memberDao;
 	}
@@ -22,5 +22,8 @@ public class MemberService {
 		return this.memberDao.getMemberByLoginId(loginId);
 	}
 
+	public String getLoginId(int id) {
+		return this.memberDao.getLoginId(id);
+	}
 
 }
